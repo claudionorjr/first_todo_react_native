@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { connect } from 'react-redux'
-import { Text, View, FlatList, TextInput, Button } from 'react-native'
+import { Text, View, FlatList, TextInput, TouchableOpacity } from 'react-native'
 import styles from './public/Styles'
 
 
@@ -11,8 +11,16 @@ class Task extends React.Component {
     return (
       <View style={styles.cell}>
         <View style={styles.col}>
-          <Text style={styles.colItem}>{obj.item.id}</Text>
-          <Text style={styles.colItem}>{obj.item.desc}</Text>
+          <Text style={[styles.colId, styles.font]}>{obj.item.id}</Text>
+          <Text style={[styles.colText, styles.font]}>{obj.item.desc}</Text>
+          <TouchableOpacity style={[styles.buttonDelete, styles.colBtn]} onPress={() => {
+            let newList = [...this.props.itens]
+            newList.splice(obj.item.id, 1)
+            this.props.dispatch({type: 'task/remove', itens: newList})
+            }
+          }>
+            <Text style={styles.font}>DELETAR</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -22,17 +30,17 @@ class Task extends React.Component {
     let textInput = ''
     return (
     <View style={styles.container}>
-      <FlatList style={styles.list} data={this.props.itens} renderItem={this.renderItem}/>
+      <FlatList style={styles.list} data={this.props.itens} renderItem={this.renderItem} ref="flatlist"
+        onContentSizeChange={() =>{
+        this.refs.flatlist.scrollToEnd()
+        }}/>
       <View style={styles.inputView}>
-        <TextInput style={styles.input} onChangeText={(text) => {
+        <TextInput style={styles.input} placeholder="Ensira a tarefa..." onChangeText={(text) => {
           textInput = text
         }} />
-        <Button style={styles.btn} onPress={() => {
+        <TouchableOpacity style={styles.buttonHover} onPress={() => {
           let KeyIndex = ((this.props.itens).length + 1).toString()
-          //let item = (list.length + 1).toString()
-
           let index = ((this.props.itens).length).toString()
-          //let item2 = (.length).toString()
 
           let newitem = {
             key: KeyIndex,
@@ -44,11 +52,13 @@ class Task extends React.Component {
           addItem.push(newitem)
           this.props.dispatch({type: 'task/add', itens: addItem})
           }
-        } title="Nova Tarefa" />
+        }>
+            <Text style={styles.font}>NOVA TAREFA</Text>
+        </TouchableOpacity>
       </View>
-      <StatusBar style="auto" />
+      <StatusBar backgroundColor="#5FC7FA" barStyle="light-content" />
     </View>
-  )
+    )
   }
 }
 

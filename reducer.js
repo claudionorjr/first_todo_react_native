@@ -12,6 +12,11 @@ export default function reducer (state = {itens: [{key: "0", id: "id", desc:"Tar
                 ...state,
                 itens: action.itens
             }
+        case 'task/remove':
+        return {
+            ...state,
+            itens: action.itens
+        }
         default:
             return state;
     }
