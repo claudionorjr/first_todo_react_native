@@ -5,8 +5,17 @@ import { Text, View, FlatList, TextInput, TouchableOpacity } from 'react-native'
 import styles from './public/Styles'
 
 
+/**
+ * @class Task
+ */
 class Task extends React.Component {
 
+  /**
+   * @description: Rederiza individualmente casa tarefa no FlatList.
+   * 
+   * @param {task} obj 
+   * @param {this.props} props 
+   */
   renderItem(obj, props) {
     return (
       <View style={styles.cell}>
@@ -15,7 +24,7 @@ class Task extends React.Component {
           <Text style={[styles.colText, styles.font]}>{obj.item.desc}</Text>
           {obj.item.key !== 'id'? (<TouchableOpacity style={[styles.buttonDelete, styles.colBtn]}
                                     onPress={() => props.dispatch({type: 'task/remove', itemToRemove: obj.item.key})}>
-                                    <Text style={styles.font}>DELETAR</Text>
+                                    <Text style={styles.font}>Deletar</Text>
                                   </TouchableOpacity>)
                                   :
                                   (<Text style={[styles.colId, styles.colBtn, styles.font]}>FUNÇÃO</Text>)
